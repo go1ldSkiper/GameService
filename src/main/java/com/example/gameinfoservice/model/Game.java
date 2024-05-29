@@ -14,7 +14,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-
+/**
+ * The type Game.
+ */
 @Setter
 @Getter
 @Entity

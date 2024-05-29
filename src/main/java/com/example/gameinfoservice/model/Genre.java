@@ -11,7 +11,9 @@ import lombok.Setter;
 
 import java.util.List;
 
-
+/**
+ * The type Genre.
+ */
 @Setter
 @Getter
 @Entity

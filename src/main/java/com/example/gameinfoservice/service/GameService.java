@@ -1,15 +1,21 @@
 package com.example.gameinfoservice.service;
 
+import com.example.gameinfoservice.aspect.AspectAnnotation;
 import com.example.gameinfoservice.cache.CacheManager;
+import com.example.gameinfoservice.exception.BadRequestException;
+import com.example.gameinfoservice.exception.ResourceNotFoundException;
 import com.example.gameinfoservice.model.Game;
 import com.example.gameinfoservice.model.Genre;
 import com.example.gameinfoservice.repository.GameRepository;
 import com.example.gameinfoservice.repository.GenreRepository;
 import lombok.AllArgsConstructor;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Service;
 
-
+/**
+ * The type Game service.
+ */
 @Service
 @AllArgsConstructor
 public class GameService {
@@ -19,8 +25,12 @@ public class GameService {
     private CacheManager cacheManager;
     private static final String GAME = "gameName_";
 
-
-
+    /**
+     * Gets all games.
+     *
+     * @return the all games
+     */
+    @AspectAnnotation
     public List<Game> getAllGames() {
         List<Game> gameList = gameRepository.findAll();
         for (Game game: gameList) {
@@ -29,30 +39,64 @@ public class GameService {
         return gameList;
     }
 
-
-
+    /**
+     * Save game boolean.
+     *
+     * @param game the game
+     * @return the boolean
+     */
+    @AspectAnnotation
     public boolean saveGame(final Game game) {
+        if (gameRepository.findGameByNameOrNull(game.getName()) != null) {
+            throw new BadRequestException("Game with name " + game.getName() + "already exist");
+        }
         cacheManager.put(GAME + game.getName(), game);
         gameRepository.save(game);
         return true;
     }
 
-
-
+    /**
+     * Change name boolean.
+     *
+     * @param id      the id
+     * @param newName the new name
+     * @return the boolean
+     */
+    @AspectAnnotation
     public boolean changeName(final Long id, final String newName) {
         Game game = gameRepository.findGameById(id);
+        if (game == null) {
+            throw new ResourceNotFoundException("Game with id " + id.toString() + "not found");
+        }
         game.setName(newName);
         cacheManager.clear();
         gameRepository.save(game);
         return true;
     }
 
-
-
+    /**
+     * Put game to genre game.
+     *
+     * @param id   the id
+     * @param name the name
+     * @return the game
+     */
+    @AspectAnnotation
     public Game putGameToGenre(final Long id, final String name) {
         Genre genre = genreRepository.findGenreByName(name);
+        if (genre == null) {
+            throw new ResourceNotFoundException("Genre with name " + name + "not found ");
+        }
         List<Game> games = genre.getGames();
+        for (Game game : games) {
+            if (Objects.equals(game.getId(), id)) {
+                throw new BadRequestException("This game is already exists in this type of genre");
+            }
+        }
         Game game = gameRepository.findGameById(id);
+        if (game == null) {
+            throw new ResourceNotFoundException("There is no such game in database");
+        }
         games.add(game);
         genre.setGames(games);
         genreRepository.save(genre);
@@ -64,10 +108,17 @@ public class GameService {
         return game;
     }
 
-
-
+    /**
+     * Delete game by id.
+     *
+     * @param id the id
+     */
+    @AspectAnnotation
     public void deleteGameById(final Long id) {
         Game game = gameRepository.findGameById(id);
+        if (game == null) {
+            throw new ResourceNotFoundException("This game doesn't exist");
+        }
         List<Genre> genres = game.getGenre();
         for (Genre genre : genres) {
             List<Game> games = genre.getGames();
@@ -79,14 +130,22 @@ public class GameService {
         gameRepository.deleteById(id);
     }
 
-
-
+    /**
+     * Gets by name.
+     *
+     * @param name the name
+     * @return the by name
+     */
+    @AspectAnnotation
     public Game getByName(final String name) {
         Object gameObj = cacheManager.get(GAME + name);
         if (gameObj != null) {
             return (Game) gameObj;
         } else {
             Game game = gameRepository.findGameByNameOrNull(name);
+            if (game == null) {
+                throw new ResourceNotFoundException("Game with name: " + name + "doesnt exist");
+            }
             cacheManager.put(GAME + game.getName(), game);
             return game;
         }

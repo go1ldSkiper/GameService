@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+/**
+ * The type Genre controller.
+ */
 @AllArgsConstructor
 @RestController
 @RequestMapping("/genre")
@@ -21,6 +23,11 @@ public class GenreController {
 
     private GenreService genreService;
 
+    /**
+     * Gets all matches.
+     *
+     * @return the all matches
+     */
     @GetMapping
     public ResponseEntity<List<Genre>> getAllMatches() {
         List<Genre> genres = genreService.getAllGenre();
@@ -31,17 +38,36 @@ public class GenreController {
         }
     }
 
+    /**
+     * Save genre response entity.
+     *
+     * @param name the name
+     * @return the response entity
+     */
     @PostMapping("/save")
     public ResponseEntity<String> saveGenre(@RequestParam final String name) {
         genreService.addNewGenre(name);
         return new ResponseEntity<>("Genre was created", HttpStatus.OK);
     }
 
+    /**
+     * Gets genre info.
+     *
+     * @param name the name
+     * @return the genre info
+     */
     @GetMapping("/getByName")
     public ResponseEntity<Genre> getGenreInfo(@RequestParam(value = "name") final String name) {
         return new ResponseEntity<>(genreService.findGenreByName(name), HttpStatus.OK);
     }
 
+    /**
+     * Change genre name response entity.
+     *
+     * @param oldName the old name
+     * @param newName the new name
+     * @return the response entity
+     */
     @PutMapping("/changeName/genre/{oldName}/{newName}")
     public ResponseEntity<String> changeGenreName(@PathVariable final String oldName,
                                                   @PathVariable final String newName) {
@@ -49,6 +75,12 @@ public class GenreController {
         return new ResponseEntity<>("Data has been updated", HttpStatus.OK);
     }
 
+    /**
+     * Delete genre response entity.
+     *
+     * @param name the name
+     * @return the response entity
+     */
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteGenre(@RequestParam(value = "name") final String name) {
         genreService.deleteByName(name);

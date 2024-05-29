@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+/**
+ * The type Game controller.
+ */
 @RequestMapping("/game")
 @AllArgsConstructor
 @RestController
@@ -19,7 +21,11 @@ import org.springframework.web.bind.annotation.*;
 public class GameController {
     private final GameService gameService;
 
-
+    /**
+     * Gets all games.
+     *
+     * @return the all games
+     */
     @GetMapping
     public ResponseEntity<List<Game>> getAllGames() {
         List<Game> gameList = gameService.getAllGames();
@@ -30,13 +36,23 @@ public class GameController {
         }
     }
 
-
+    /**
+     * Gets by name.
+     *
+     * @param name the name
+     * @return the by name
+     */
     @GetMapping("/getByName")
     public ResponseEntity<Game> getByName(@RequestParam final String name) {
         return new ResponseEntity<>(gameService.getByName(name), HttpStatus.OK);
     }
 
-
+    /**
+     * Add match response entity.
+     *
+     * @param game the game
+     * @return the response entity
+     */
     @PostMapping("/saveGame")
     public ResponseEntity<String> addMatch(
             @RequestBody final Game game) {
@@ -47,7 +63,14 @@ public class GameController {
         }
     }
 
-
+    /**
+     * Change game name response entity.
+     *
+     * @param id      the id
+     * @param newName the new name
+     * @return the response entity
+     */
+//Изаменение имени игры по id
     @PutMapping("/changeInfo/game/{id}/{newName}")
     public ResponseEntity<String> changeGameName(@PathVariable final Long id,
                                                  @PathVariable final String newName) {
@@ -58,12 +81,27 @@ public class GameController {
         }
     }
 
+    /**
+     * Put game to genre response entity.
+     *
+     * @param id   the id
+     * @param name the name
+     * @return the response entity
+     */
+//Привязка какой-либо игры к жанру
     @PutMapping("/putGame/{id}/toGenre/{name}")
     public ResponseEntity<Game> putGameToGenre(@PathVariable final Long id,
                                                @PathVariable final String name) {
         return new ResponseEntity<>(gameService.putGameToGenre(id, name), HttpStatus.OK);
     }
 
+    /**
+     * Delete game response entity.
+     *
+     * @param id the id
+     * @return the response entity
+     */
+//Удаление игры
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteGame(@RequestParam(value = "id") final Long id) {
         gameService.deleteGameById(id);
