@@ -161,8 +161,7 @@ public class GameController {
     repositoriesService.saveGenre(genre);
     return new ResponseEntity<>("Data has been updated", HttpStatus.OK);
   }
-
-  //Привязка какой-либо игры к жанру
+  
   @PutMapping("/putGame/{id}/toGenre/{name}")
   public ResponseEntity<String> putGameToGenre(@PathVariable Long id,
                                                @PathVariable String name) {
