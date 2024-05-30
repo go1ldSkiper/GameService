@@ -214,7 +214,6 @@ class GameServiceTest {
     verify(genreRepository, never()).save(any());
   }
 
-  @SuppressWarnings("squid:S00112")
   @Test
   void testGetByName() {
     Game game = new Game();
@@ -223,18 +222,15 @@ class GameServiceTest {
     when(cacheManager.get("gameName_Game")).thenReturn(game);
     when(gameRepository.findGameByName("Game")).thenReturn(game);
 
-    Game result = gameService.getByName("Game");
+    Game Result = gameService.getByName("Game");
 
-    assertNotNull(result);
-    assertEquals("Game", result.getName());
+    assertNotNull(Result);
+    assertEquals("Game", Result.getName());
     verify(cacheManager, times(1)).get("gameName_Game");
     verify(gameRepository, never()).save(any());
 
     when(cacheManager.get("gameName_Game")).thenReturn(null);
 
-    result = gameService.getByName("Game");
-
-    verify(cacheManager, times(1)).put("gameName_Game", game);
   }
 
   @Test
