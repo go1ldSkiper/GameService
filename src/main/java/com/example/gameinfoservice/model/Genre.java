@@ -11,9 +11,7 @@ import lombok.Setter;
 
 import java.util.List;
 
-/**
- * The type Genre.
- */
+/** The type Genre. */
 @Setter
 @Getter
 @Entity
@@ -27,5 +25,4 @@ public class Genre {
   @ManyToMany(mappedBy = "genre")
   @JsonIgnoreProperties(value = "genre")
   private List<Game> games;
-
 }
