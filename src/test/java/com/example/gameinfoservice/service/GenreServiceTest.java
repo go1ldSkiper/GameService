@@ -9,9 +9,12 @@ import com.example.gameinfoservice.repository.GameRepository;
 import com.example.gameinfoservice.repository.GenreRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<<<<<<< HEAD
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+=======
+>>>>>>> f08aa90c8e02269b92c74c98a24117acd783481a
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ import static org.mockito.Mockito.*;
 class GenreServiceTest {
     private static final String GENRE = "GenreName_";
 
+<<<<<<< HEAD
     @Mock
     private GenreRepository genreRepository;
 
@@ -32,12 +36,29 @@ class GenreServiceTest {
     private GameRepository gameRepository;
 
     @InjectMocks
+=======
+    private GenreRepository genreRepository;
+
+    private CacheManager cacheManager;
+
+    private GameRepository gameRepository;
+
+>>>>>>> f08aa90c8e02269b92c74c98a24117acd783481a
     private GenreService genreService;
 
     @BeforeEach
     void setUp() {
+<<<<<<< HEAD
         MockitoAnnotations.initMocks(this);
     }
+=======
+        gameRepository = mock(GameRepository.class);
+        genreRepository = mock(GenreRepository.class);
+        cacheManager = mock(CacheManager.class);
+        genreService = new GenreService(genreRepository,cacheManager,gameRepository);
+    }
+
+>>>>>>> f08aa90c8e02269b92c74c98a24117acd783481a
     @Test
     void testGetAllGenre() {
         List<Genre> genres = new ArrayList<>();
@@ -142,7 +163,11 @@ class GenreServiceTest {
         Genre genre = new Genre();
         genre.setName(genreName);
         Game game = new Game();
+<<<<<<< HEAD
         List <Genre> genreList = new ArrayList<>();
+=======
+        List<Genre> genreList = new ArrayList<>();
+>>>>>>> f08aa90c8e02269b92c74c98a24117acd783481a
         genreList.add(genre);
         game.setGenre(genreList);
         List<Game> games = new ArrayList<>();

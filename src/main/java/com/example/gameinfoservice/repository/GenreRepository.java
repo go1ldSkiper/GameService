@@ -7,11 +7,11 @@ import org.springframework.stereotype.Repository;
 /** The interface Genre repository. */
 @Repository
 public interface GenreRepository extends JpaRepository<Genre, Long> {
-    /**
-     * Find genre by name genre.
-     *
-     * @param name the name
-     * @return the genre
-     */
-    Genre findGenreByName(String name);
+  /**
+   * Find genre by name genre.
+   *
+   * @param name the name
+   * @return the genre
+   */
+  Genre findGenreByName(String name);
 }

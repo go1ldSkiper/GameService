@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class CounterAspect {
+<<<<<<< HEAD
     /** The Request counter. */
     RequestCounter requestCounter = new RequestCounter();
 
@@ -33,4 +34,26 @@ public class CounterAspect {
         String methodName = joinPoint + " " + joinPoint.getSignature().getName();
         LOGGER.info("Request Counter: {} - {}\n", requestCounter.getCount(), methodName);
     }
+=======
+  /** The Request counter. */
+  RequestCounter requestCounter = new RequestCounter();
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(CounterAspect.class);
+
+  /** Call at my service annotation. */
+  @Pointcut("@annotation(RequestCounterAnnotation)")
+  public void callAtMyServiceAnnotation() {}
+
+  /**
+   * Log before.
+   *
+   * @param joinPoint the join point
+   */
+  @Before(value = "callAtMyServiceAnnotation()")
+  public void logBefore(final JoinPoint joinPoint) {
+    requestCounter.increment();
+    String methodName = joinPoint + " " + joinPoint.getSignature().getName();
+    LOGGER.info("Request Counter: {} - {}\n", requestCounter.getCount(), methodName);
+  }
+>>>>>>> f08aa90c8e02269b92c74c98a24117acd783481a
 }

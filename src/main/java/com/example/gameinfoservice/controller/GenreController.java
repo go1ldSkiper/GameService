@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+<<<<<<< HEAD
+=======
+import java.util.List;
+
+>>>>>>> f08aa90c8e02269b92c74c98a24117acd783481a
 /** The type Genre controller. */
 @AllArgsConstructor
 @RestController
@@ -23,46 +28,47 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "GenreController", description = "You can view and edit information about genre")
 public class GenreController {
 
-    private GenreService genreService;
+  private GenreService genreService;
 
-    /**
-     * Gets all matches.
-     *
-     * @return the all matches
-     */
-    @GetMapping
-    public ResponseEntity<List<Genre>> getAllMatches() {
-        List<Genre> genres = genreService.getAllGenre();
-        if (genres.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(genres, HttpStatus.OK);
-        }
+  /**
+   * Gets all matches.
+   *
+   * @return the all matches
+   */
+  @GetMapping
+  public ResponseEntity<List<Genre>> getAllMatches() {
+    List<Genre> genres = genreService.getAllGenre();
+    if (genres.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } else {
+      return new ResponseEntity<>(genres, HttpStatus.OK);
     }
+  }
 
-    /**
-     * Save genre response entity.
-     *
-     * @param name the name
-     * @return the response entity
-     */
-    @PostMapping("/save")
-    public ResponseEntity<String> saveGenre(@RequestParam final String name) {
-        genreService.addNewGenre(name);
-        return new ResponseEntity<>("Genre was created", HttpStatus.OK);
-    }
+  /**
+   * Save genre response entity.
+   *
+   * @param name the name
+   * @return the response entity
+   */
+  @PostMapping("/save")
+  public ResponseEntity<String> saveGenre(@RequestParam final String name) {
+    genreService.addNewGenre(name);
+    return new ResponseEntity<>("Genre was created", HttpStatus.OK);
+  }
 
-    /**
-     * Gets genre info.
-     *
-     * @param name the name
-     * @return the genre info
-     */
-    @GetMapping("/getByName")
-    public ResponseEntity<Genre> getGenreInfo(@RequestParam(value = "name") final String name) {
-        return new ResponseEntity<>(genreService.findGenreByName(name), HttpStatus.OK);
-    }
+  /**
+   * Gets genre info.
+   *
+   * @param name the name
+   * @return the genre info
+   */
+  @GetMapping("/getByName")
+  public ResponseEntity<Genre> getGenreInfo(@RequestParam(value = "name") final String name) {
+    return new ResponseEntity<>(genreService.findGenreByName(name), HttpStatus.OK);
+  }
 
+<<<<<<< HEAD
     /**
      * Change genre name response entity.
      *
@@ -76,16 +82,31 @@ public class GenreController {
         genreService.changeName(oldName, newName);
         return new ResponseEntity<>("Data has been updated", HttpStatus.OK);
     }
+=======
+  /**
+   * Change genre name response entity.
+   *
+   * @param oldName the old name
+   * @param newName the new name
+   * @return the response entity
+   */
+  @PutMapping("/changeName/genre/{oldName}/{newName}")
+  public ResponseEntity<String> changeGenreName(
+      @PathVariable final String oldName, @PathVariable final String newName) {
+    genreService.changeName(oldName, newName);
+    return new ResponseEntity<>("Data has been updated", HttpStatus.OK);
+  }
+>>>>>>> f08aa90c8e02269b92c74c98a24117acd783481a
 
-    /**
-     * Delete genre response entity.
-     *
-     * @param name the name
-     * @return the response entity
-     */
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteGenre(@RequestParam(value = "name") final String name) {
-        genreService.deleteByName(name);
-        return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
-    }
+  /**
+   * Delete genre response entity.
+   *
+   * @param name the name
+   * @return the response entity
+   */
+  @DeleteMapping("/delete")
+  public ResponseEntity<String> deleteGenre(@RequestParam(value = "name") final String name) {
+    genreService.deleteByName(name);
+    return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
+  }
 }

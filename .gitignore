@@ -28,7 +28,11 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+<<<<<<< HEAD
 #dqweq
+=======
+#dq
+>>>>>>> f08aa90c8e02269b92c74c98a24117acd783481a
 ### VS Code ###
 .vscode/
 .logfile.log

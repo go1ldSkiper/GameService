@@ -15,7 +15,11 @@
     <description>GameInfoService</description>
     <properties>
         <java.version>17</java.version>
+<<<<<<< HEAD
         <sonar.organization>malankamcqueen</sonar.organization>
+=======
+        <sonar.organization>go1ldskiper</sonar.organization>
+>>>>>>> f08aa90c8e02269b92c74c98a24117acd783481a
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
     <dependencies>
