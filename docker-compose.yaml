@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: database
+    environment:
+      POSTGRES_USER: skipar
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: spring_game_info
+    volumes:
+      - spring_game_info:/var/lib/postgresql/data2
+    networks:
+      - spring_game_info_net
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U skipar -d spring_game_info" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  backend:
+    image: spring_game_info_backend
+    container_name: backend
+    networks:
+      - spring_game_info_net
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+        
+  frontend:
+    image: spring_game_info_frontend
+    container_name: frontend
+    networks:
+      - spring_game_info_net
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+      - db
+
+volumes:
+  spring_game_info:
+
+
+networks:
+  spring_game_info_net:

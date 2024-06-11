@@ -2,23 +2,25 @@ package com.example.gameinfoservice.controller;
 
 import com.example.gameinfoservice.model.Genre;
 import com.example.gameinfoservice.service.GenreService;
-
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
-/**
- * The type Genre controller.
- */
+/** The type Genre controller. */
 @AllArgsConstructor
 @RestController
 @RequestMapping("/genre")
-@Tag(name = "GenreController",
-        description = "You can view and edit information about genre")
+@Tag(name = "GenreController", description = "You can view and edit information about genre")
 public class GenreController {
 
     private GenreService genreService;
@@ -69,9 +71,9 @@ public class GenreController {
      * @return the response entity
      */
     @PutMapping("/changeName/genre/{oldName}/{newName}")
-    public ResponseEntity<String> changeGenreName(@PathVariable final String oldName,
-                                                  @PathVariable final String newName) {
-        genreService.changeName(oldName,newName);
+    public ResponseEntity<String> changeGenreName(
+            @PathVariable final String oldName, @PathVariable final String newName) {
+        genreService.changeName(oldName, newName);
         return new ResponseEntity<>("Data has been updated", HttpStatus.OK);
     }
 

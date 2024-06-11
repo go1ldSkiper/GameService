@@ -1,27 +1,18 @@
 package com.example.gameinfoservice.cache;
 
+import java.util.HashMap;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 
-/**
- * The type Cache manager.
- */
+/** The type Cache manager. */
 @Service
 public class CacheManager {
-    private static final int MAX_SIZE = 2;
-    private final Map<String, Object> cache = new LinkedHashMap<>(MAX_SIZE, 0.75f, true) {
-        @Override
-        protected boolean removeEldestEntry(final Map.Entry<String, Object> eldest) {
-            return size() > MAX_SIZE;
-        }
-    };
+    private final HashMap<String, Object> cache = new HashMap<>();
 
     /**
      * Put.
      *
-     * @param key   the key
+     * @param key the key
      * @param value the value
      */
     public void put(final String key, final Object value) {
@@ -57,11 +48,8 @@ public class CacheManager {
         cache.remove(key);
     }
 
-    /**
-     * Clear.
-     */
+    /** Clear. */
     public void clear() {
         cache.clear();
     }
 }
-

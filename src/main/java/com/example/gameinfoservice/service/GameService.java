@@ -1,6 +1,7 @@
 package com.example.gameinfoservice.service;
 
 import com.example.gameinfoservice.aspect.AspectAnnotation;
+import com.example.gameinfoservice.aspect.RequestCounterAnnotation;
 import com.example.gameinfoservice.cache.CacheManager;
 import com.example.gameinfoservice.exception.BadRequestException;
 import com.example.gameinfoservice.exception.ResourceNotFoundException;
@@ -8,14 +9,12 @@ import com.example.gameinfoservice.model.Game;
 import com.example.gameinfoservice.model.Genre;
 import com.example.gameinfoservice.repository.GameRepository;
 import com.example.gameinfoservice.repository.GenreRepository;
-import lombok.AllArgsConstructor;
 import java.util.List;
 import java.util.Objects;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/**
- * The type Game service.
- */
+/** The type Game service. */
 @Service
 @AllArgsConstructor
 public class GameService {
@@ -30,54 +29,36 @@ public class GameService {
      *
      * @return the all games
      */
-    @AspectAnnotation
+    @RequestCounterAnnotation
     public List<Game> getAllGames() {
         List<Game> gameList = gameRepository.findAll();
-        for (Game game: gameList) {
+        for (Game game : gameList) {
             cacheManager.put(GAME + game.getName(), game);
         }
         return gameList;
     }
 
     /**
-     * Save game boolean.
+     * Save game game.
      *
      * @param game the game
-     * @return the boolean
+     * @return the game
      */
+    @RequestCounterAnnotation
     @AspectAnnotation
-    public boolean saveGame(final Game game) {
-        if (gameRepository.findGameByNameOrNull(game.getName()) != null) {
-            throw new BadRequestException("Game with name " + game.getName() + "already exist");
+    public Game saveGame(final Game game) {
+        if (gameRepository.findGameByName(game.getName()) != null) {
+            throw new BadRequestException("Game with name: " + game.getName() + "already exist");
         }
         cacheManager.put(GAME + game.getName(), game);
         gameRepository.save(game);
-        return true;
-    }
-
-    /**
-     * Change name boolean.
-     *
-     * @param id      the id
-     * @param newName the new name
-     * @return the boolean
-     */
-    @AspectAnnotation
-    public boolean changeName(final Long id, final String newName) {
-        Game game = gameRepository.findGameById(id);
-        if (game == null) {
-            throw new ResourceNotFoundException("Game with id " + id.toString() + "not found");
-        }
-        game.setName(newName);
-        cacheManager.clear();
-        gameRepository.save(game);
-        return true;
+        return game;
     }
 
     /**
      * Put game to genre game.
      *
-     * @param id   the id
+     * @param id the id
      * @param name the name
      * @return the game
      */
@@ -85,18 +66,19 @@ public class GameService {
     public Game putGameToGenre(final Long id, final String name) {
         Genre genre = genreRepository.findGenreByName(name);
         if (genre == null) {
-            throw new ResourceNotFoundException("Genre with name " + name + "not found ");
+            throw new ResourceNotFoundException("Genre with name " + name + " not found   ");
         }
+        Game game =
+                gameRepository
+                        .findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("There is no such game in database"));
         List<Game> games = genre.getGames();
-        for (Game game : games) {
-            if (Objects.equals(game.getId(), id)) {
+        for (Game gameTmp : games) {
+            if (Objects.equals(gameTmp.getId(), id)) {
                 throw new BadRequestException("This game is already exists in this type of genre");
             }
         }
-        Game game = gameRepository.findGameById(id);
-        if (game == null) {
-            throw new ResourceNotFoundException("There is no such game in database");
-        }
+
         games.add(game);
         genre.setGames(games);
         genreRepository.save(genre);
@@ -115,10 +97,10 @@ public class GameService {
      */
     @AspectAnnotation
     public void deleteGameById(final Long id) {
-        Game game = gameRepository.findGameById(id);
-        if (game == null) {
-            throw new ResourceNotFoundException("This game doesn't exist");
-        }
+        Game game =
+                gameRepository
+                        .findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Game with id: " + id + " not found"));
         List<Genre> genres = game.getGenre();
         for (Genre genre : genres) {
             List<Game> games = genre.getGames();
@@ -142,12 +124,41 @@ public class GameService {
         if (gameObj != null) {
             return (Game) gameObj;
         } else {
-            Game game = gameRepository.findGameByNameOrNull(name);
+            Game game = gameRepository.findGameByName(name);
             if (game == null) {
-                throw new ResourceNotFoundException("Game with name: " + name + "doesnt exist");
+                throw new ResourceNotFoundException("Game with name: " + name + " doesnt exist");
             }
             cacheManager.put(GAME + game.getName(), game);
             return game;
         }
+    }
+
+    /**
+     * Change name boolean.
+     *
+     * @param id the id
+     * @param newName the new name
+     * @return the boolean
+     */
+    @AspectAnnotation
+    public boolean changeName(final Long id, final String newName) {
+        Game game =
+                gameRepository
+                        .findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Game with id " + id + " not found "));
+        game.setName(newName);
+        cacheManager.clear();
+        gameRepository.save(game);
+        return true;
+    }
+
+    /**
+     * Add multiple games list.
+     *
+     * @param gameList the game list
+     * @return the list
+     */
+    public List<Game> addMultipleGames(final List<Game> gameList) {
+        return gameList.stream().map(this::saveGame).toList();
     }
 }

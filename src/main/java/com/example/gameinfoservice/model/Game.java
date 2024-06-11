@@ -14,9 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-/**
- * The type Game.
- */
+/** The type Game. */
 @Setter
 @Getter
 @Entity
@@ -25,15 +23,15 @@ public class Game {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   private String name;
   private String description;
+
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(
-      name = "game_genre",
-      joinColumns = @JoinColumn(name = "game_id"),
-      inverseJoinColumns = @JoinColumn(name = "genre_id")
-  )
+          name = "game_genre",
+          joinColumns = @JoinColumn(name = "game_id"),
+          inverseJoinColumns = @JoinColumn(name = "genre_id"))
   @JsonIgnoreProperties(value = "games")
   private List<Genre> genre;
-
 }

@@ -8,14 +8,12 @@ import com.example.gameinfoservice.model.Game;
 import com.example.gameinfoservice.model.Genre;
 import com.example.gameinfoservice.repository.GameRepository;
 import com.example.gameinfoservice.repository.GenreRepository;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
-/**
- * The type Genre service.
- */
+/** The type Genre service. */
 @Service
 @AllArgsConstructor
 public class GenreService {
